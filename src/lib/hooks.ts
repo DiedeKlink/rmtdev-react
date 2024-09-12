@@ -36,26 +36,67 @@ export function useJobItem(Id: number | null) {
   return { jobItem: data?.jobItem, isLoading } as const;
 }
 
+// --------------------------------------------
+
+type JobItemsApiResponse = {
+  public: boolean;
+  sorted: boolean;
+  jobItems: JobItem[];
+};
+
+const fetchJobItems = async (
+  searchText: string
+): Promise<JobItemsApiResponse> => {
+  const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.description);
+  }
+  const data = await response.json();
+  return data.jobItems;
+};
+
 export function useJobItems(searchText: string) {
-  const [jobItems, setJobItems] = useState<JobItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (!searchText) return;
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
-      const { jobItems } = await response.json();
-      setIsLoading(false);
-      setJobItems(jobItems);
-    };
-
-    fetchData();
-  }, [searchText]);
-
+  const { data, isInitialLoading } = useQuery(
+    ["job-items", searchText],
+    () => fetchJobItems(searchText),
+    {
+      staleTime: 1000 * 60 * 60,
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: Boolean(searchText),
+      onError: (error) => {
+        console.error("An error occurred while fetching job items", error);
+      },
+    }
+  );
+  const jobItems = data || [];
+  const isLoading = isInitialLoading;
   return { jobItems, isLoading } as const;
 }
+
+// export function useJobItems(searchText: string) {
+//   const [jobItems, setJobItems] = useState<JobItem[]>([]);
+//   const [isLoading, setIsLoading] = useState(false);
+
+//   useEffect(() => {
+//     if (!searchText) return;
+
+//     const fetchData = async () => {
+//       setIsLoading(true);
+//       const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
+//       const { jobItems } = await response.json();
+//       setIsLoading(false);
+//       setJobItems(jobItems);
+//     };
+
+//     fetchData();
+//   }, [searchText]);
+
+//   return { jobItems, isLoading } as const;
+// }
+
+//--------------------------------------------
 
 export function useActiveId() {
   const [activeId, setActiveId] = useState<number | null>(null);
