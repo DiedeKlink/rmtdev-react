@@ -23,8 +23,10 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
 
   //Derived State
-  const totalNumberOfResults = jobItems.length;
-  const jobItemsSliced = jobItems.slice(0, 7);
+  const totalNumberOfResults = Array.isArray(jobItems) ? jobItems.length : 0;
+  const jobItemsSliced = Array.isArray(jobItems)
+    ? jobItems.slice((currentPage - 1) * 7, currentPage * 7)
+    : [];
 
   //Handlers
   const handleChangePage = (direction: "next" | "previous") => {
@@ -59,6 +61,7 @@ function App() {
           <PaginationControls
             onClick={handleChangePage}
             currentPage={currentPage}
+            totalNumberOfResults={totalNumberOfResults}
           />
         </Sidebar>
         <JobItemContent />
