@@ -22,8 +22,6 @@ function App() {
   const { jobItems, isLoading } = useJobItems(debounchedSearchText);
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log(currentPage);
-
   //Derived State
   const totalNumberOfResults = jobItems.length;
   const jobItemsSliced = jobItems.slice(0, 7);
