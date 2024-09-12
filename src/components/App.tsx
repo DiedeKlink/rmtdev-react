@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Background from "./Background";
 import Container from "./Container";
 import Footer from "./Footer";
@@ -13,6 +13,7 @@ import PaginationControls from "./PaginationControls";
 import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [searchText, setSearchText] = useState("");
@@ -49,6 +50,8 @@ function App() {
       </Container>
 
       <Footer />
+
+      <Toaster position={"top-right"} />
     </>
   );
 }

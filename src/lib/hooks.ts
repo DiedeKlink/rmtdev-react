@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 type JobItemApiResponse = {
   public: boolean;
@@ -66,7 +67,7 @@ export function useJobItems(searchText: string) {
       retry: false,
       enabled: Boolean(searchText),
       onError: (error) => {
-        console.error("An error occurred while fetching job items", error);
+        toast.error(error.message);
       },
     }
   );
