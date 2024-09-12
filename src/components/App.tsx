@@ -15,6 +15,7 @@ import SortingControls from "./SortingControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "react-hot-toast";
 import { RESULTS_PER_PAGE } from "../lib/constants";
+import { SortBy } from "../lib/types";
 
 function App() {
   //State
@@ -22,15 +23,23 @@ function App() {
   const debounchedSearchText = useDebounce(searchText, 250);
   const { jobItems, isLoading } = useJobItems(debounchedSearchText);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState<SortBy>("relevant");
 
   //Derived State
-  const totalNumberOfResults = Array.isArray(jobItems) ? jobItems.length : 0;
-  const jobItemsSliced = Array.isArray(jobItems)
-    ? jobItems.slice(
-        (currentPage - 1) * RESULTS_PER_PAGE,
-        currentPage * RESULTS_PER_PAGE
-      )
-    : [];
+  const totalNumberOfResults = jobItems.length;
+  const jobItemsSorted = jobItems.sort((a, b) => {
+    if (sortBy === "relevant") {
+      return b.relevanceScore - a.relevanceScore;
+    } else if (sortBy === "recent") {
+      return a.daysAgo - b.daysAgo;
+    }
+
+    return 0;
+  });
+  const jobItemsSortedAndSliced = jobItemsSorted.slice(
+    (currentPage - 1) * RESULTS_PER_PAGE,
+    currentPage * RESULTS_PER_PAGE
+  );
 
   //Handlers
   const handleChangePage = (direction: "next" | "previous") => {
@@ -39,6 +48,11 @@ function App() {
     } else if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
     }
+  };
+
+  const handleChangeSortBy = (newSortBy: SortBy) => {
+    setCurrentPage(1);
+    setSortBy(newSortBy);
   };
 
   return (
@@ -58,10 +72,10 @@ function App() {
         <Sidebar>
           <SidebarTop>
             <ResultsCount totalNumberOfResults={totalNumberOfResults} />
-            <SortingControls />
+            <SortingControls sortBy={sortBy} onClick={handleChangeSortBy} />
           </SidebarTop>
 
-          <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
+          <JobList jobItems={jobItemsSortedAndSliced} isLoading={isLoading} />
           <PaginationControls
             onClick={handleChangePage}
             currentPage={currentPage}
