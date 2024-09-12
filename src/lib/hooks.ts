@@ -3,14 +3,16 @@ import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 
+const fetchJobItem = async (Id: number | null) => {
+  const response = await fetch(`${BASE_API_URL}/${Id}`);
+  const data = await response.json();
+  return data;
+};
+
 export function useJobItem(Id: number | null) {
   const { data, isLoading } = useQuery(
     ["job-item", Id],
-    async () => {
-      const response = await fetch(`${BASE_API_URL}/${Id}`);
-      const data = await response.json();
-      return data;
-    },
+    () => (Id ? fetchJobItem(Id) : null),
     {
       staleTime: 1000 * 60 * 60,
       refetchOnWindowFocus: false,
