@@ -1,4 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
+import { RESULTS_PER_PAGE } from "../lib/constants";
 
 type PaginationControlsProps = {
   onClick: (direction: "next" | "previous") => void;
@@ -20,7 +21,7 @@ export default function PaginationControls({
           currentPage={currentPage}
         />
       )}
-      {totalNumberOfResults > currentPage * 7 && (
+      {totalNumberOfResults > currentPage * RESULTS_PER_PAGE && (
         <PaginationButton
           onClick={() => onClick("next")}
           direction="next"

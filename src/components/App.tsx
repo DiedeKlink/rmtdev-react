@@ -14,6 +14,7 @@ import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "react-hot-toast";
+import { RESULTS_PER_PAGE } from "../lib/constants";
 
 function App() {
   //State
@@ -25,7 +26,10 @@ function App() {
   //Derived State
   const totalNumberOfResults = Array.isArray(jobItems) ? jobItems.length : 0;
   const jobItemsSliced = Array.isArray(jobItems)
-    ? jobItems.slice((currentPage - 1) * 7, currentPage * 7)
+    ? jobItems.slice(
+        (currentPage - 1) * RESULTS_PER_PAGE,
+        currentPage * RESULTS_PER_PAGE
+      )
     : [];
 
   //Handlers
