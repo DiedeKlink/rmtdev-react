@@ -10,6 +10,10 @@ type JobItemApiResponse = {
 
 const fetchJobItem = async (Id: number | null): Promise<JobItemApiResponse> => {
   const response = await fetch(`${BASE_API_URL}/${Id}`);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.description);
+  }
   const data = await response.json();
   return data;
 };
@@ -36,9 +40,6 @@ export function useJobItems(searchText: string) {
   const [jobItems, setJobItems] = useState<JobItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const totalNumberOfResults = jobItems.length;
-  const jobItemsSliced = jobItems.slice(0, 7);
-
   useEffect(() => {
     if (!searchText) return;
 
@@ -53,7 +54,7 @@ export function useJobItems(searchText: string) {
     fetchData();
   }, [searchText]);
 
-  return { jobItemsSliced, isLoading, totalNumberOfResults } as const;
+  return { jobItems, isLoading } as const;
 }
 
 export function useActiveId() {
