@@ -3,7 +3,12 @@ import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 
-const fetchJobItem = async (Id: number | null) => {
+type JobItemApiResponse = {
+  public: boolean;
+  jobItem: JobItemExpanded;
+};
+
+const fetchJobItem = async (Id: number | null): Promise<JobItemApiResponse> => {
   const response = await fetch(`${BASE_API_URL}/${Id}`);
   const data = await response.json();
   return data;
@@ -24,7 +29,7 @@ export function useJobItem(Id: number | null) {
     }
   );
 
-  return { jobItem: data.jobItem, isLoading } as const;
+  return { jobItem: data?.jobItem, isLoading } as const;
 }
 
 export function useJobItems(searchText: string) {
