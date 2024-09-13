@@ -1,6 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { RESULTS_PER_PAGE } from "../lib/constants";
 import { PageDirection } from "../lib/types";
+import { useJobItemsContext } from "../lib/hooks";
 
 export default function PaginationControls() {
   const {
