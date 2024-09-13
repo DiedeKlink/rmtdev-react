@@ -73,6 +73,8 @@ export function useJobItems(searchText: string) {
   return { jobItems, isLoading } as const;
 }
 
+// --------------------------------------------
+
 export function useActiveId() {
   const [activeId, setActiveId] = useState<number | null>(null);
 
@@ -105,4 +107,15 @@ export function useDebounce<T>(value: T, delay = 500): T {
   }, [value, delay]);
 
   return debounchedValue;
+}
+
+export function useLocalStorage(key: string, initialValue) {
+  const [value, setValue] = useState(() =>
+    JSON.parse(localStorage.getItem(key) || JSON.stringify(initialValue))
+  );
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [value, key]);
+
+  return [value, setValue] as const;
 }
