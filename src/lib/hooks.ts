@@ -67,6 +67,7 @@ export function useJobItems(searchText: string) {
       onError: handleError,
     }
   );
+
   const jobItems = data || [];
   const isLoading = isInitialLoading;
   return { jobItems, isLoading } as const;
