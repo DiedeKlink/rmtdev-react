@@ -42,6 +42,7 @@ function App() {
   );
 
   //Handlers
+
   const handleChangePage = (direction: PageDirection) => {
     if (direction === "previous") {
       setCurrentPage((prev) => prev - 1);
