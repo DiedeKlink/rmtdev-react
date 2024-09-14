@@ -31,7 +31,7 @@ export default function JobItemsContextProvider({
   const [sortBy, setSortBy] = useState<SortBy>("relevant");
 
   //Derived State
-  const totalNumberOfResults = jobItems.length;
+  const totalNumberOfResults = jobItems ? jobItems.length : 0;
   const jobItemsSorted = useMemo(
     () =>
       [...(jobItems || [])].sort((a, b) => {
@@ -71,7 +71,7 @@ export default function JobItemsContextProvider({
 
   const contextValue = useMemo(
     () => ({
-      jobItems,
+      jobItems: jobItems || null,
       jobItemsSortedAndSliced,
       isLoading,
       totalNumberOfResults,

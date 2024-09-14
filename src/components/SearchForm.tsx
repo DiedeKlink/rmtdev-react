@@ -1,6 +1,6 @@
 import { useSearchTextContext } from "../lib/hooks";
 
-export default function SearchForm({}) {
+export default function SearchForm() {
   const { searchText, handleChangeSearchText } = useSearchTextContext();
   return (
     <form

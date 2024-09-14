@@ -54,18 +54,24 @@ export function useJobItems(ids: number[]) {
 
   const jobItems = results
     .map((result) => result.data?.jobItem)
-    .filter((jobItem) => jobItem !== undefined);
+    //   .filter((jobItem) => jobItem !== undefined);
 
+    // const isLoading = results.some((result) => result.isLoading);
+
+    // return { jobItems, isLoading } as const;
+    .filter((jobItem) => Boolean(jobItem)) as JobItemExpanded[];
   const isLoading = results.some((result) => result.isLoading);
 
-  return { jobItems, isLoading } as const;
+  return {
+    jobItems,
+    isLoading,
+  };
 }
 
 // --------------------------------------------
 
 type JobItemsApiResponse = {
   public: boolean;
-  sorted: boolean;
   jobItems: JobItem[];
 };
 
@@ -78,7 +84,7 @@ const fetchJobItems = async (
     throw new Error(errorData.description);
   }
   const data = await response.json();
-  return data.jobItems;
+  return data;
 };
 
 export function useSearchQuery(searchText: string) {
@@ -94,9 +100,13 @@ export function useSearchQuery(searchText: string) {
     }
   );
 
-  const jobItems = data || [];
+  const jobItems = data?.jobItems;
   const isLoading = isInitialLoading;
   return { jobItems, isLoading } as const;
+  // return {
+  //   jobItems: data?.jobItems,
+  //   isLoading: isInitialLoading,
+  // } as const;
 }
 
 // --------------------------------------------

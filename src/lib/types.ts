@@ -4,7 +4,7 @@ export type JobItem = {
   title: string;
   company: string;
   daysAgo: number;
-  relavanceScore: number;
+  relevanceScore: number;
   date: string;
 };
 
