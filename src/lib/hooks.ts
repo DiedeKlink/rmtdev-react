@@ -157,7 +157,8 @@ export function useLocalStorage<T>(
     localStorage.setItem(key, JSON.stringify(value));
   }, [value, key]);
 
-  return [value, setValue];
+  return [value, setValue] as [T, React.Dispatch<React.SetStateAction<T>>];
+  // return [value, setValue];
 }
 
 export function useOnClickOutside(
