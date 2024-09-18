@@ -1124,10 +1124,13 @@ body::-webkit-scrollbar {
   .search-results {
     width: 100%;
   }
-
-  .job-details {
-    display: none;
+  .sidebar {
+    width: 100%;
   }
+
+  /* .job-details {
+    display: none;
+  } */
 
   .footer {
     max-width: 800px;
@@ -1137,6 +1140,13 @@ body::-webkit-scrollbar {
 }
 
 @media (max-width: 660px) {
+  .job-info__extras {
+    flex-direction: column;
+    row-gap: 10px;
+  }
+  .reviews__list {
+    grid-template-columns: 1fr;
+  }
   .intro {
     width: 100%;
   }

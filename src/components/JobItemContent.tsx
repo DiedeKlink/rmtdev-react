@@ -12,6 +12,12 @@ export default function JobItemContent() {
   if (!jobItem) {
     return <EmptyJobContent />;
   }
+  if (jobItem) {
+    if (window.innerWidth < 1009) {
+      const elem = document.querySelector(".job-details");
+      elem?.scrollIntoView();
+    }
+  }
 
   return (
     <section className="job-details">
